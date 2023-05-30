@@ -14,11 +14,13 @@ get_block_height() {
         chain_name="ethereum"
         node_port=31301
         nodeServiceName=eth
+        echo $chain_name
         ;;
         "bsc")
         chain_name="bsc"
         node_port=31041
         nodeServiceName=bsc
+        echo $chain_name
         ;;
     esac
 
