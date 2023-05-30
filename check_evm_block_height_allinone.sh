@@ -15,7 +15,8 @@ get_block_height() {
         "bsc") chain_name="bsc" node_port=31041
         ;;
     esac
-    globalHeight=$(curl -s -X POST 'https://$1.blockpi.network/v1/rpc/0cb922caf1e980040cbecca069e07c542d8fa373' -H 'Content-Type: application/json' -d '{"jsonrpc": "2.0","method": "eth_blockNumber","params": [],"id": 1}' | jq -r ".result" | tr 'a-f' 'A-F')
+
+    globalHeight=$(curl -s -X POST 'https://$chain_name.blockpi.network/v1/rpc/0cb922caf1e980040cbecca069e07c542d8fa373' -H 'Content-Type: application/json' -d '{"jsonrpc": "2.0","method": "eth_blockNumber","params": [],"id": 1}' | jq -r ".result" | tr 'a-f' 'A-F')
     LocalHeight=$(curl -Ls -X POST 'http://127.0.0.1:$node_port' -H 'Content-Type: application/json' -d '{"jsonrpc": "2.0","method": "eth_blockNumber","params": [],"id": 1}' | jq -r ".result" | tr 'a-f' 'A-F')
 }
 
