@@ -10,9 +10,14 @@ base_speed=0.00
 
 get_block_height() {
     case "${1}" in
-        "eth") chain_name="ethereum" node_port=31301
+        "eth")
+        chain_name="ethereum"
+        node_port=31301
+        nodeServiceName=eth
         ;;
-        "bsc") chain_name="bsc" node_port=31041
+        "bsc") chain_name="bsc"
+        node_port=31041
+        nodeServiceName=bsc
         ;;
     esac
 
