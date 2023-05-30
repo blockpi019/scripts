@@ -15,7 +15,8 @@ get_block_height() {
         node_port=31301
         nodeServiceName=eth
         ;;
-        "bsc") chain_name="bsc"
+        "bsc")
+        chain_name="bsc"
         node_port=31041
         nodeServiceName=bsc
         ;;
