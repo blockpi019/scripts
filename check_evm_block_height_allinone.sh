@@ -1,5 +1,5 @@
 #!/bin/bash
-nodeServiceName=eth
+#nodeServiceName=eth
 # 检测服务是否同步完成 因链改动
 
 est_time=0
