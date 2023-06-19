@@ -17,8 +17,8 @@ get_block_height() {
     dHeight=$(echo "obase=10; ibase=16; ${globalHeight:2}-${LocalHeight:2}" | bc)
     if [ ${dHeight#-} -gt 50 ]; then
         systemctl restart bsc-archive.service
-        printf "restart %s.service success" $nodeServiceName
+        printf "restart %s.service success! \n" $nodeServiceName
     else
-        printf "Don't need restart %s.service success" $nodeServiceName
+        printf "Don't need restart %s.service success! \n" $nodeServiceName
     fi
 
