@@ -21,4 +21,3 @@ get_block_height() {
     else
         printf "Don't need restart %s.service success! \n" $nodeServiceName
     fi
-
