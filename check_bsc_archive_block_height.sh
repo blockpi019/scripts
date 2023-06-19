@@ -49,7 +49,8 @@ do
         fi
 
     else
-        printf "相差高度：%d \n" $dHeight
+        printf "相差高度："
+        printf "%d\n" $dHeight
     fi
 
     # 判断高度是否小于特定值
