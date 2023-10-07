@@ -2,7 +2,7 @@ from flask import Flask
 
 app = Flask(__name__)
 
-# 定义通用的路由，无论路径如何都返回相同的结果
+# Define a generic route that returns the same result regardless of the path
 @app.route('/<path:path>')
 def handle_path(path):
     return '127.0.0.1'
