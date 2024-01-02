@@ -21,8 +21,13 @@ sleep 60
 echo "Stopping $node_client_service..."
 systemctl stop $node_client_service || { echo "Failed to stop $node_client_service"; exit 1; }
 
-echo "Moving old nitro binary..."
-mv ${node_client_dir} ${node_data_dir}nitro-old || { echo "Failed to move nitro binary"; exit 1; }
+# Check if $node_client_dir exists and move it if it does
+if [ -e "$node_client_dir" ]; then
+    echo "$node_client_dir exists. Moving the file..."
+    mv "${node_client_dir}" "${node_data_dir}nitro-old" || { echo "Failed to move nitro binary"; exit 1; }
+else
+    echo "$node_client_dir does not exist. Skipping the move operation."
+fi
 
 echo "Downloading new nitro binary..."
 aria2c -s 16 -x 16 -q -d $node_data_dir -o nitro $software_url || { echo "Failed to download nitro binary"; exit 1; }
