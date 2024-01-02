@@ -14,9 +14,14 @@ random_sleep=$(( (RANDOM % 6) * 60 ))
 echo "Sleeping for a random duration: $random_sleep seconds before stopping services..."
 sleep $random_sleep
 
-echo "Stopping $hypernode_service..."
-systemctl stop $hypernode_service || { echo "Failed to stop $hypernode_service"; exit 1; }
-sleep 60
+# Check if $hypernode_service is active, and stop it if it is
+if systemctl is-active --quiet $hypernode_service; then
+    echo "Stopping $hypernode_service..."
+    systemctl stop $hypernode_service || { echo "Failed to stop $hypernode_service"; exit 1; }
+    sleep 60
+else
+    echo "$hypernode_service is not active. Skipping stop operation."
+fi
 
 echo "Stopping $node_client_service..."
 systemctl stop $node_client_service || { echo "Failed to stop $node_client_service"; exit 1; }
@@ -46,44 +51,3 @@ echo "Starting $hypernode_service..."
 systemctl start $hypernode_service || { echo "Failed to start $hypernode_service"; exit 1; }
 
 echo "All steps completed successfully."
-
-
-#### draft ######
-#!/bin/bash
-set -euo pipefail
-
-# Generate a random sleep duration that is a multiple of 120, between 0 and 600 seconds
-random_sleep=$(( (RANDOM % 6) * 120 ))
-
-echo "Sleeping for a random duration: $random_sleep seconds before stopping services..."
-sleep $random_sleep
-
-echo "Stopping hypernode-arbitrum service..."
-systemctl stop hypernode-arbitrum.service || { echo "Failed to stop hypernode-arbitrum service"; exit 1; }
-sleep 60
-
-echo "Stopping arbitrum-archive service..."
-systemctl stop arbitrum-archive.service || { echo "Failed to stop arbitrum-archive service"; exit 1; }
-sleep 60
-
-echo "Moving old nitro binary..."
-mv /node/archive/arbitrum/bin/nitro /node/archive/arbitrum/bin/nitro-old || { echo "Failed to move nitro binary"; exit 1; }
-
-echo "Downloading new nitro binary..."
-aria2c -s 16 -x 16 -q -d /node/archive/arbitrum/bin/ -o nitro http://bweb.131810.xyz/blockpi/software/arbitrum/nitro || { echo "Failed to download nitro binary"; exit 1; }
-
-echo "Making nitro binary executable..."
-chmod +x /node/archive/arbitrum/bin/nitro || { echo "Failed to make nitro binary executable"; exit 1; }
-
-echo "Checking nitro version..."
-/node/archive/arbitrum/bin/nitro version || { echo "Nitro version check failed"; exit 1; }
-
-echo "Starting arbitrum-archive service..."
-systemctl start arbitrum-archive.service || { echo "Failed to start arbitrum-archive service"; exit 1; }
-sleep 60
-
-echo "Starting hypernode-arbitrum service..."
-systemctl start hypernode-arbitrum.service || { echo "Failed to start hypernode-arbitrum service"; exit 1; }
-
-echo "All steps completed successfully."
-
