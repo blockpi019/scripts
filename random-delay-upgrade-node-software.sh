@@ -7,6 +7,8 @@ node_client_service="arbitrum-archive.service"
 node_client_dir="/node/archive/arbitrum/bin/nitro"
 node_data_dir="/node/archive/arbitrum/bin/"
 software_url="http://file.204001.xyz/blockpi/software/arbitrum/nitro"
+# whether change service, if so, please change the statement on "if [ $is_change_service -eq 1 ]; then" below
+is_change_service=1
 
 # Generate a random sleep duration that is a multiple of 60, between 0 and 300 seconds
 random_sleep=$(( (RANDOM % 6) * 60 ))
@@ -25,6 +27,13 @@ fi
 
 echo "Stopping $node_client_service..."
 systemctl stop $node_client_service || { echo "Failed to stop $node_client_service"; exit 1; }
+
+if [ $is_change_service -eq 1 ]; then
+    sudo sed -i 's/--node\./--execution\./g' /etc/systemd/system/arbitrum-archive.service
+    systemctl daemon-reload
+else
+    echo "Do not change service file"
+fi
 
 # Check if $node_client_dir exists and move it if it does
 if [ -e "$node_client_dir" ]; then
