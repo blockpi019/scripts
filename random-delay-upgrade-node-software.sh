@@ -45,7 +45,7 @@ echo "Making nitro binary executable..."
 chmod +x ${node_client_dir} || { echo "Failed to make nitro binary executable"; exit 1; }
 
 echo "Checking nitro version..."
-${node_client_dir} version || { echo "Nitro version check failed"; exit 1; }
+${node_client_dir} --version || { echo "Nitro version check failed"; exit 1; }
 
 echo "Starting $node_client_service..."
 systemctl start $node_client_service || { echo "Failed to start $node_client_service"; exit 1; }
