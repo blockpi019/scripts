@@ -9,21 +9,16 @@ node_data_dir="/node/archive/arbitrum/bin/"
 software_url="http://file.204001.xyz/blockpi/software/arbitrum/nitro"
 # whether change service, if so, please change the statement on "if [ $is_change_service -eq 1 ]; then" below
 is_change_service=1
-
 # Generate a random sleep duration that is a multiple of 60, between 0 and 300 seconds
-random_sleep=$(( (RANDOM % 6) * 60 ))
+#random_sleep=$(( (RANDOM % 6) * 60 ))
+random_sleep=0
 
 echo "Sleeping for a random duration: $random_sleep seconds before stopping services..."
 sleep $random_sleep
 
-# Check if $hypernode_service is active, and stop it if it is
-if systemctl is-active --quiet $hypernode_service; then
-    echo "Stopping $hypernode_service..."
-    systemctl stop $hypernode_service || { echo "Failed to stop $hypernode_service"; exit 1; }
-    sleep 60
-else
-    echo "$hypernode_service is not active. Skipping stop operation."
-fi
+echo "Stopping $hypernode_service..."
+systemctl stop $hypernode_service || { echo "Failed to stop $hypernode_service"; exit 1; }
+sleep 60
 
 echo "Stopping $node_client_service..."
 systemctl stop $node_client_service || { echo "Failed to stop $node_client_service"; exit 1; }
@@ -50,7 +45,7 @@ echo "Making nitro binary executable..."
 chmod +x ${node_client_dir} || { echo "Failed to make nitro binary executable"; exit 1; }
 
 echo "Checking nitro version..."
-${node_client_dir} --version || { echo "Nitro version check failed"; exit 1; }
+${node_client_dir} version || { echo "Nitro version check failed"; exit 1; }
 
 echo "Starting $node_client_service..."
 systemctl start $node_client_service || { echo "Failed to start $node_client_service"; exit 1; }
